@@ -1,5 +1,6 @@
 # Auth
 Auth 구현 예시입니다.
+
 JDK 11, gradle 7버전 이상의 Springboot 프로젝트입니다.
 jwt(access, refresh token)을 활용하여 auth를 설계하였습니다.
 로컬 빌드 및 테스트에 용이하도록 내장 redis 및 h2db를 사용하였습니다(내장 redis의 경우 스프링 프로젝트를 셧다운 해도 계속 구동되기 때문에 재빌드 시 port를 kill해야 합니다).
