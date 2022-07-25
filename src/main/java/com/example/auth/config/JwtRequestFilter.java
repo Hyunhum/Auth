@@ -79,20 +79,20 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         final Cookie jwtToken = cookieUtil.getCookie(httpServletRequest,JwtUtil.ACCESS_TOKEN_NAME);
 
-        String username = null;
+        String userPhoneNum = null;
         String jwt = null;
         String refreshJwt = null;
-        String refreshUname = null;
+        String refreshUserPhoneNum = null;
 
         try{
             if(jwtToken != null){
                 jwt = jwtToken.getValue();
-                username = jwtUtil.getPhoneNum(jwt);
+                userPhoneNum = jwtUtil.getPhoneNum(jwt);
             }
-            if(username!=null){
-                UserDetails userDetails = userDetailService.loadUserByUsername(username);
+            if(userPhoneNum!=null){
+                UserDetails userDetails = userDetailService.loadUserByUsername(userPhoneNum);
 
-                if(jwtUtil.validateToken(jwt,userDetails)){
+                if(jwtUtil.validateToken(jwt, userDetails)){
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
@@ -110,16 +110,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         try{
             if(refreshJwt != null){
                 ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-                refreshUname = valueOperations.get(refreshJwt);
+                refreshUserPhoneNum = valueOperations.get(refreshJwt);
 
-                if(refreshUname.equals(jwtUtil.getPhoneNum(refreshJwt))){
-                    UserDetails userDetails = userDetailService.loadUserByUsername(refreshUname);
+                if(refreshUserPhoneNum.equals(jwtUtil.getPhoneNum(refreshJwt))){
+                    UserDetails userDetails = userDetailService.loadUserByUsername(refreshUserPhoneNum);
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
                     LogInUserDto userDto = new LogInUserDto("dummyEmail", 
-                    "dummyPW", refreshUname);
+                    "dummyPW", refreshUserPhoneNum);
                     String newToken =jwtUtil.generateToken(userDto);
 
                     Cookie newAccessToken = cookieUtil.createCookie(JwtUtil.ACCESS_TOKEN_NAME,newToken);
