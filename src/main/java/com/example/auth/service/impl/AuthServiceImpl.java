@@ -3,6 +3,7 @@ package com.example.auth.service.impl;
 import com.example.auth.service.*;
 import com.example.auth.service.util.*;
 import com.example.auth.dto.*;
+import com.example.auth.config.UserRole;
 import com.example.auth.dao.entity.*;
 import com.example.auth.dao.repository.*;
 
@@ -48,6 +49,17 @@ public class AuthServiceImpl implements AuthService {
         this.saltUtil = saltUtil;
     }
 
+    // 반복되는 로직 내장 함수로 모듈화
+    private void checkPassword(User user, LogInUserDto userDto) throws Exception {
+
+        String userPassword = saltUtil.encodePassword(
+            user.getSalt().getSalt(), userDto.getPassword());
+        if(!user.getPassword().equals(userPassword)) {
+            throw new Exception ("비밀번호가 틀립니다.");
+        } 
+
+    }
+
     @Transactional
     @Override
     public ResponseDto signUpUser(SignUpUserDto userDto) throws Exception {
@@ -73,6 +85,7 @@ public class AuthServiceImpl implements AuthService {
             .password(saltUtil.encodePassword(salt, userDto.getPassword()))
             .name(userDto.getName())
             .phoneNum(userDto.getPhoneNum())
+            .role(UserRole.ROLE_USER)
             .salt(new Salt(salt))
             .build();
 
@@ -94,12 +107,7 @@ public class AuthServiceImpl implements AuthService {
 
                 User user = userRepository.findByEmail(userDto.getEmail()).get();
 
-                // 함수화 
-                String userPassword = saltUtil.encodePassword(
-                    user.getSalt().getSalt(), userDto.getPassword());
-                if(!user.getPassword().equals(userPassword)) {
-                    throw new Exception ("비밀번호가 틀립니다.");
-                }
+                checkPassword(user, userDto);
 
                 /* Redis에 키를 리프레쉬 토큰, 밸류를 phoneNum으로 저장합니다.
                    이메일로 로그인 시 dto의 phoneNum이 비어있기 때문에 채워줍니다.*/
@@ -112,11 +120,7 @@ public class AuthServiceImpl implements AuthService {
                 User user = userRepository.findByPhoneNum(userDto.getPhoneNum())
                 .orElseThrow(()-> new Exception("등록된 유저가 아닙니다."));
                 
-                String userPassword = saltUtil.encodePassword(
-                    user.getSalt().getSalt(), userDto.getPassword());
-                if(!user.getPassword().equals(userPassword)) {
-                    throw new Exception ("비밀번호가 틀립니다.");
-                }
+                checkPassword(user, userDto);
                 
                 return userDto;
             }
