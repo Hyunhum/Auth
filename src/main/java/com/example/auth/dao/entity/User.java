@@ -81,13 +81,14 @@ public class User {
 
     @Builder
     public User(String email, String nickname, String password, 
-    String name, String phoneNum, Salt salt) {
+    String name, String phoneNum, UserRole role, Salt salt) {
         
         this.email = email;
         this.nickname = nickname;
         this.password = password;
         this.name = name;
         this.phoneNum = phoneNum;
+        this.role = role;
         this.salt = salt;
 
     }
