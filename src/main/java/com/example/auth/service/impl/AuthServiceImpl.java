@@ -139,9 +139,7 @@ public class AuthServiceImpl implements AuthService {
                 throw new Exception("비밀번호 형식이 올바르지 않습니다");
             }
         
-            String salt = saltUtil.genSalt();
-            
-            user.changePassword(saltUtil.encodePassword(salt, userDto.getPassword()));
+            user.changePassword(saltUtil.encodePassword(user.getSalt().getSalt(), userDto.getPassword()));
             
             userRepository.save(user);
         
