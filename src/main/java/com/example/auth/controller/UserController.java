@@ -23,6 +23,10 @@ import com.example.auth.service.*;
 import com.example.auth.service.util.*;
 import com.example.auth.dto.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
+
 import java.time.Duration;
 
 
@@ -32,21 +36,31 @@ public class UserController {
 
     private UserService userService;
 
+    private CookieUtil cookieUtil;
+
+    private JwtUtil jwtUtil;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(
+        UserService userService,
+        CookieUtil cookieUtil,
+        JwtUtil jwtUtil) {
         this.userService = userService;
+        this.cookieUtil = cookieUtil;
+        this.jwtUtil = jwtUtil;
     }
 
-    @GetMapping("/userInfo/{userId}")
+    @GetMapping("/userInfo")
     public ResponseEntity<UserInfoDto> findUserInfoByUserId(
-        @PathVariable Long userId
+        HttpServletRequest req
     ) {
 
         try {
 
             return ResponseEntity.ok()
             .body(
-                userService.findUserInfoByUserId(userId)
+                userService.findUserInfoByUserId(
+                    cookieUtil.getCookie(req, jwtUtil.REFRESH_TOKEN_NAME).getValue())
                 );
 
         } catch (Exception e) {
