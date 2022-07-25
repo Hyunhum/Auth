@@ -21,7 +21,7 @@ import com.example.auth.dto.LogInUserDto;
 public class JwtUtil {
 
     public final static long TOKEN_VALIDATION_SECOND = 30 * 60 * 1000L;   // 30분
-    public final static long REFRESH_TOKEN_VALIDATION_SECOND = 60 * 60 * 24 * 365 * 1000L;   // 30일
+    public final static long REFRESH_TOKEN_VALIDATION_SECOND = 60 * 60 * 24 * 30 * 1000L;   // 30일
 
     final static public String ACCESS_TOKEN_NAME = "accessToken";
     final static public String REFRESH_TOKEN_NAME = "refreshToken";
