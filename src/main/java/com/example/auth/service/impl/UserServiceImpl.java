@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public UserInfoDto findUserInfoByUserId(String refreshToken) throws Exception {
+    public UserInfoDto findUserInfoByRefreshToken(String refreshToken) throws Exception {
         try{
             // refreshToken 정보로 userPhoneNum을 get
             ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();

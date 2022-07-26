@@ -6,6 +6,6 @@ import javax.servlet.http.Cookie;
 
 public interface UserService {
 
-    public UserInfoDto findUserInfoByUserId(String refreshToken) throws Exception;
+    public UserInfoDto findUserInfoByRefreshToken(String refreshToken) throws Exception;
 
 }

@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping("/userInfo")
-    public ResponseEntity<UserInfoDto> findUserInfoByUserId(
+    public ResponseEntity<UserInfoDto> findUserInfoByRefreshToken(
         HttpServletRequest req
     ) {
 
@@ -59,7 +59,7 @@ public class UserController {
 
             return ResponseEntity.ok()
             .body(
-                userService.findUserInfoByUserId(
+                userService.findUserInfoByRefreshToken(
                     cookieUtil.getCookie(req, jwtUtil.REFRESH_TOKEN_NAME).getValue())
                 );
 
