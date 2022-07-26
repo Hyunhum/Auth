@@ -49,7 +49,7 @@ ChangePasswordUserDto 객체를 요청하여 등록된 전화번호일 경우 �
 ## Test
 
 
-비즈니스 로직을 검증하기 위해 AuthServiceImpl, UserServiceImpl의 테스트를 진행하였고 gradle Test JacocoTestReport로 생성된 레포트(경로: /build/reports/jacoco/test/html/com.example.auth.service.impl/index.html)를 보시면 테스트 커버리지 100%를 달성한 것을 확인할 수 있습니다.
+비즈니스 로직을 검증하기 위해 AuthServiceImpl, UserServiceImpl의 테스트를 진행하였고 gradle test JacocoTestReport을 입력하시면 레포트(경로: /build/reports/jacoco/test/html/com.example.auth.service.impl/index.html)가 생성됩니다. 확인하시면 테스트 커버리지 100%를 달성한 것을 확인할 수 있습니다.
 
 
 
