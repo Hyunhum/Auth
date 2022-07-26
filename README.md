@@ -9,6 +9,8 @@ MVC 패턴에 JPA orm을 사용하였습니다.
 
 내장 redis의 경우 스프링 프로젝트를 셧다운 해도 계속 구동되기 때문에 재빌드 시 port를 kill해야 합니다.
 
+Postman을 통해 테스트해보는 것을 추천드립니다.
+
 스프링 시큐리티 의존성을 추가하고 필터를 JWT(access, refresh token)을 활용하여 검증하는 방식으로 커스터마이즈했습니다.
 
 1. access token: 로그인 시 쿠키에 발급되는 jwt로 해당 access token이 있을 경우 로그인된 사용자로 인식합니다. 탈취 위험을 줄이고 보안성을 높이기 위해 만료 시간을 30분으로 설정합니다.
@@ -49,7 +51,7 @@ ChangePasswordUserDto 객체를 요청하여 등록된 전화번호일 경우 �
 ## Test
 
 
-비즈니스 로직을 검증하기 위해 AuthServiceImpl, UserServiceImpl의 테스트를 진행하였고 gradle test JacocoTestReport을 입력하시면 레포트(경로: /build/reports/jacoco/test/html/com.example.auth.service.impl/index.html)가 생성됩니다. 확인하시면 테스트 커버리지 100%를 달성한 것을 확인할 수 있습니다.
+비즈니스 로직을 검증하기 위해 AuthServiceImpl, UserServiceImpl의 테스트를 진행하였고 gradle test JacocoTestReport을 입력하시면 레포트(경로: /build/reports/jacoco/test/html/com.example.auth.service.impl/index.html)가 생성됩니다. 확인하시면 테스트 커버리지 100%를 달성한 것을 확인할 수 있습니다. 이외에도 언급했듯이 Postman을 통해 api의 작동이 잘되는지를 테스트 완료하였습니다.
 
 
 
