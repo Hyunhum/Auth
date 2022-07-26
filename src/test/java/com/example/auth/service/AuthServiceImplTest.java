@@ -56,6 +56,78 @@ public class AuthServiceImplTest {
     public AuthServiceImpl authService;
 
     @Test
+    @DisplayName("signup user test")
+    void signUpUser() throws Exception {
+
+        //1. when user is present
+        //given
+        SignUpUserDto userDto = new SignUpUserDto("email", "nickname", "password", "name", "phoneNum");
+        User user = new User("email", "nickname", "password", "name", "phoneNum", 
+        UserRole.ROLE_USER, new Salt(saltUtil.genSalt()));
+        //when
+        when(userRepository.findByPhoneNum("phoneNum")).thenReturn(
+            Optional.ofNullable(user));
+        //then
+        try {
+            authService.signUpUser(userDto);
+        } catch (Exception e) {
+            assertThat(e.getMessage()).isEqualTo("이미 등록된 유저입니다");
+        }
+
+        //2. when user is not present but phoneNum is invalid
+        //given
+        SignUpUserDto userDtoPhoneNum = new SignUpUserDto("email", "nickname", "password", "name", "phoneNum");
+        //when
+        when(userRepository.findByPhoneNum("phoneNum")).thenReturn(
+            Optional.ofNullable(null));
+        //then
+        try {
+            authService.signUpUser(userDtoPhoneNum);
+        } catch (Exception e) {
+            assertThat(e.getMessage()).isEqualTo("전화번호 형식이 올바르지 않습니다");
+        }
+        //3. when user is not present but email is invalid
+        //given
+        SignUpUserDto userDtoEmail = new SignUpUserDto("email", "nickname", "password", "name", "01012345678");
+        //when
+        when(userRepository.findByPhoneNum("01012345678")).thenReturn(
+            Optional.ofNullable(null));
+        //then
+        try {
+            authService.signUpUser(userDtoEmail);
+        } catch (Exception e) {
+            assertThat(e.getMessage()).isEqualTo("이메일 형식이 올바르지 않습니다");
+        }
+        //4. when user is not present but password is invalid
+        //given
+        SignUpUserDto userDtoPassword = new SignUpUserDto("abc@naver.com", "nickname", "password!@#", "name", "01012345678");
+        //then
+        try {
+            authService.signUpUser(userDtoPassword);
+        } catch (Exception e) {
+            assertThat(e.getMessage()).isEqualTo("비밀번호 형식이 올바르지 않습니다");
+        }
+        //4. when user is not present but name is invalid
+        //given
+        SignUpUserDto userDtoName = new SignUpUserDto("abc@naver.com", "nickname", "password", "name!@#", "01012345678");
+        //then
+        try {
+            authService.signUpUser(userDtoName);
+        } catch (Exception e) {
+            assertThat(e.getMessage()).isEqualTo("이름 형식이 올바르지 않습니다");
+        }
+        //5. when user is not present but all fields are valid
+        //given
+        SignUpUserDto userDtoValid = new SignUpUserDto("abc@naver.com", "nickname", "password", "heum", "01012345678");
+        //when
+        ResponseDto responseDto = authService.signUpUser(userDtoValid);
+        //then
+        assertThat(responseDto.getCode()).isEqualTo("200");
+        assertThat(responseDto.getMessage()).isEqualTo("회원가입이 완료되었습니다");      
+
+    }
+
+    @Test
     @DisplayName("login user test")
     void logInUser() throws Exception {
 
@@ -118,6 +190,51 @@ public class AuthServiceImplTest {
         }
 
     }
+
+    @Test
+    @DisplayName("change password user test")
+    void changePasswordUser() throws Exception {
+
+        //1. when user is not present
+        //given
+        ChangePasswordUserDto userDto =  new ChangePasswordUserDto("password", "phoneNum");
+        //when
+        when(userRepository.findByPhoneNum("phoneNum")).thenReturn(
+            Optional.ofNullable(null));
+        //then
+        try {
+            authService.changePasswordUser(userDto);
+        } catch (Exception e) {
+            assertThat(e.getMessage()).isEqualTo("등록되지 않은 유저입니다");
+        }
+
+        //2. when user is present but password invalid
+        //given
+        ChangePasswordUserDto userDtoPassword =  new ChangePasswordUserDto("password!@#", "phoneNum");
+        User user = new User("email", "nickname", "password", "name", "phoneNum", 
+        UserRole.ROLE_USER, new Salt(saltUtil.genSalt()));
+        //when
+        when(userRepository.findByPhoneNum("phoneNum")).thenReturn(
+            Optional.ofNullable(user));
+        //then
+        try {
+            authService.changePasswordUser(userDtoPassword);
+        } catch (Exception e) {
+            assertThat(e.getMessage()).isEqualTo("비밀번호 형식이 올바르지 않습니다");
+        }
+        
+        //2. when user is present and password valid
+        //given
+        ChangePasswordUserDto userDtoValid =  new ChangePasswordUserDto("password", "phoneNum");
+        //when
+        ResponseDto responseDto = authService.changePasswordUser(userDtoValid);
+        //then
+        assertThat(responseDto.getCode()).isEqualTo("200");
+        assertThat(responseDto.getMessage()).isEqualTo("비밀번호 변경이 완료되었습니다");
+
+    }
+
+
 
 }
 
