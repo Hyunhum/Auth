@@ -40,9 +40,9 @@ ChangePasswordUserDto 객체를 요청하여 등록된 전화번호일 경우 �
 
 혹은 refresh token을 검증하여 access token을 재발급해줍니다.
 
-#### 내 정보 보기(/findUserInfoByRefreshToken)
+#### 내 정보 보기(/userInfo)
 
-컨트롤러에서 서블릿을 인자로 받아 쿠키에서 refresh token의 이름을 가져옵니다. 해당 변수가 key로 redis에 조회한 값이 등록된 유저의 phoneNum인지 확인합니다. 유저 객체 확인 후 UserInfoDto 객체의 정적 팩토리 메서드 from()에 유저 객체를 넣어줌으로써 비밀번호를 제외한 모든 유저의 정보를 담은 UserInfoDto를 반환합니다.
+컨트롤러에서 서블릿을 인자로 받아 쿠키에서 refresh token의 이름을 가져옵니다. 해당 토큰을 key로 redis에 조회한 값이 등록된 유저의 phoneNum인지 확인합니다. 유저 객체 확인 후 UserInfoDto 객체의 정적 팩토리 메서드 from()에 유저 객체를 넣어줌으로써 비밀번호를 제외한 모든 유저의 정보를 담은 UserInfoDto를 반환합니다.
 
 
 
