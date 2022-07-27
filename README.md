@@ -14,7 +14,7 @@ Postman을 통해 테스트해보는 것을 추천드립니다.
 스프링 시큐리티 의존성을 추가하고 필터를 JWT(access, refresh token)을 활용하여 검증하는 방식으로 커스터마이즈했습니다.
 
 1. access token: 로그인 시 쿠키에 발급되는 jwt로 해당 access token이 있을 경우 로그인된 사용자로 인식합니다. 탈취 위험을 줄이고 보안성을 높이기 위해 만료 시간을 30분으로 설정합니다.
-2. refresh token: 마찬가지로 로그인 시 쿠키에 발급되는 jwt로 access token의 짧은 만료 시간으로 초래할 불편함을 축소해줍니다. access token이 만료되어도 refresh token이 있고 검증이 된다면 access token을 재발급해줍니다. refresh token의 만료 시간은 30일이고 redis에 key로 저장합니다(value: userPhoneNum).
+2. refresh token: 마찬가지로 로그인 시 쿠키에 발급되는 jwt로 access token의 짧은 만료 시간으로 초래할 불편함을 축소해줍니다. access token이 만료되어도 refresh token이 있고 검증이 된다면 access token을 재발급해줍니다. refresh token의 만료 시간은 30일이고 redis에 key로 저장합니다(value: userPhoneNum). 이를 통해 access token과 
 
 구현된 api는 하기와 같습니다.
 
